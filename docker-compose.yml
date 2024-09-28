@@ -1,0 +1,69 @@
+name: itb-kk
+services:
+  frontend:
+    image: wanassanan/itb-kk-frontend:latest
+    restart: on-failure:5
+    networks:
+      - fe-be-net
+
+  database:
+    image: wanassanan/itb-kk-database:latest
+    restart: on-failure:5
+    healthcheck:
+      test: ["CMD", "/healthcheck.sh"]
+      interval: 2s
+      timeout: 2s
+      retries: 20
+    networks:
+      - be-db-net
+    env_file: ./env.d/env-db
+    volumes:
+      - ./mysql-datalib:/var/lib/mysql
+    ports:
+      - 13306:3306
+
+  backend:
+    depends_on:
+      database:
+        condition: service_healthy
+    image: wanassanan/itb-kk-backend:latest
+    restart: on-failure:5
+    networks:
+      - fe-be-net
+      - be-db-net
+    env_file: ./env.d/env-be
+    ports:
+      - 8080:8080
+
+  proxy-server:
+    depends_on:
+      - frontend
+      - backend
+    image: nginx:alpine
+    restart: on-failure:5
+    networks:
+      - fe-be-net
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./ssl/fullchain.pem:/ssl/fullchain.pem
+      - ./ssl/privkey.pem:/ssl/privkey.pem
+      - ./ssl/dhparam-2048.pem:/ssl/dhparam-2048.pem
+    configs:
+      - source: proxy_public_config
+        target: /etc/nginx/conf.d/intproj23.conf
+      - source: proxy_private_config
+        target: /etc/nginx/conf.d/ip23pl1.conf
+
+networks:
+  fe-be-net:
+    driver: bridge
+  be-db-net:
+    driver: bridge
+
+configs:
+  proxy_public_config:
+    file: ./proxy-conf/intproj23.conf
+  proxy_private_config:
+    file: ./proxy-conf/ip23pl1.conf
