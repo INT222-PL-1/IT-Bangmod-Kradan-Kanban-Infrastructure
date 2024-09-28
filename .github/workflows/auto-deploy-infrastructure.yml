@@ -2,6 +2,9 @@ name: Auto deploy infrastructure
 run-name: "@${{ github.actor }} was pushed up a new update. Auto deploy start !!"
 on:
   workflow_dispatch: 
+  push:
+    branches: 
+      - main
 
 jobs:
   SSH-update-infra:
@@ -17,7 +20,7 @@ jobs:
         script: |
           cd INT221/project
           pwd
-          git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/INT222-PL-1/IT-Bangmod-Kradan-Kanban-Infrastructure.git
+          git remote set-url origin https://${{ secrets.PAT }}@github.com/INT222-PL-1/IT-Bangmod-Kradan-Kanban-Infrastructure.git
           docker compose down
           git fetch
           git pull origin main
