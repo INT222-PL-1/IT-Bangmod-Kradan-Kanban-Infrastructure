@@ -19,9 +19,9 @@ jobs:
         password: ${{ secrets.SSH_PASSWORD }}
         script: |
           cd INT221/project
-          pwd
           git remote set-url origin https://${{ secrets.PAT }}@github.com/INT222-PL-1/IT-Bangmod-Kradan-Kanban-Infrastructure.git
           docker compose down
           git fetch
           git pull origin main
+          echo ${{ secrets.ENV_BE }} > ./env.d/env-be
           docker compose up -d
