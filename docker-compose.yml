@@ -59,15 +59,15 @@ services:
       - source: proxy_private_config
         target: /etc/nginx/conf.d/ip23pl1.conf
 
-    watchtower:
-      image: containrrr/watchtower
-      container_name: watchtower
-      restart: on-failure:5
-      volumes:
-        - /var/run/docker.sock:/var/run/docker.sock
-      environment:
-        WATCHTOWER_CLEANUP: true
-      command: --interval 30 itbkk-frontend itbkk-backend itbkk-database
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    restart: on-failure:5
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      WATCHTOWER_CLEANUP: true
+    command: --interval 30 itbkk-frontend itbkk-backend itbkk-database
 
 networks:
   fe-be-net:
