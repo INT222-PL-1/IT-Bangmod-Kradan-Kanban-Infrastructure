@@ -2,12 +2,14 @@ name: itb-kk
 services:
   frontend:
     image: wanassanan/itb-kk-frontend:latest
+    container_name: itbkk-frontend
     restart: on-failure:5
     networks:
       - fe-be-net
 
   database:
     image: wanassanan/itb-kk-database:latest
+    container_name: itbkk-database
     restart: on-failure:5
     healthcheck:
       test: ["CMD", "/healthcheck.sh"]
@@ -27,6 +29,7 @@ services:
       database:
         condition: service_healthy
     image: wanassanan/itb-kk-backend:latest
+    container_name: itbkk-backend
     restart: on-failure:5
     networks:
       - fe-be-net
@@ -55,6 +58,16 @@ services:
         target: /etc/nginx/conf.d/intproj23.conf
       - source: proxy_private_config
         target: /etc/nginx/conf.d/ip23pl1.conf
+
+    watchtower:
+      image: containrrr/watchtower
+      container_name: watchtower
+      restart: on-failure:5
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+      environment:
+        WATCHTOWER_CLEANUP: true
+      command: --interval 30 itbkk-frontend itbkk-backend itbkk-database
 
 networks:
   fe-be-net:
