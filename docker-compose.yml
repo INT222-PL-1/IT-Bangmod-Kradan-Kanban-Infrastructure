@@ -43,6 +43,7 @@ services:
       - frontend
       - backend
     image: nginx:alpine
+    container_name: proxy
     restart: on-failure:5
     networks:
       - frontier
