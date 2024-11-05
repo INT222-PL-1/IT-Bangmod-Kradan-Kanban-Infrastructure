@@ -65,9 +65,8 @@ services:
     restart: on-failure:5
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    environment:
-      WATCHTOWER_CLEANUP: true
-    command: --interval 30 itbkk-frontend itbkk-backend itbkk-database
+    env_file: ./env.d/env-watchtower
+    command: itbkk-frontend itbkk-backend itbkk-database
 
 networks:
   fe-be-net:
