@@ -35,6 +35,8 @@ services:
       - frontier
       - backtier
     env_file: ./env.d/env-be
+    volumes:
+      - ./attachments-dir:/upload-dir
     ports:
       - 8080:8080
 
