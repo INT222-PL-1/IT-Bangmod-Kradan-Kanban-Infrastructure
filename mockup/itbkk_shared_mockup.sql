@@ -15,7 +15,7 @@ CREATE TABLE `users` (
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP USER IF EXISTS authuser;
-CREATE USER authuser IDENTIFIED WITH mysql_native_password BY '1111';
+CREATE USER 'authuser'@'%' identified WITH mysql_native_password BY 'both-pl-1.mysql';
 GRANT SELECT ON `itbkk_shared`.`users` TO authuser;
 
 commit;
