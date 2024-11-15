@@ -1,0 +1,80 @@
+name: itb-kk-dev
+services:
+  frontend:
+    image: wanassanan/itb-kk-frontend:development
+    container_name: itbkk-frontend-dev
+    restart: on-failure:5
+    networks:
+      - frontier
+
+  database:
+    image: wanassanan/itb-kk-database:development
+    container_name: itbkk-database-dev
+    restart: on-failure:5
+    healthcheck:
+      test: ["CMD", "/healthcheck.sh"]
+      interval: 2s
+      timeout: 2s
+      retries: 20
+    networks:
+      - backtier
+    env_file: ./env.d/env-db
+    volumes:
+      - ./mysql-datalib:/var/lib/mysql
+    ports:
+      - 13306:3306
+
+  backend:
+    depends_on:
+      database:
+        condition: service_healthy
+    image: wanassanan/itb-kk-backend:development
+    container_name: itbkk-backend-dev
+    restart: on-failure:5
+    networks:
+      - frontier
+      - backtier
+    env_file: ./env.d/env-be
+    volumes:
+      - ./attachments-dir:/upload-dir
+    ports:
+      - 8080:8080
+
+  proxy-server:
+    depends_on:
+      - frontend
+      - backend
+    image: nginx:alpine
+    container_name: proxy-dev
+    restart: on-failure:5
+    networks:
+      - frontier
+      - proxy-watchtower
+    ports:
+      - 80:80
+    configs:
+      - source: proxy_dev_config
+        target: /etc/nginx/conf.d/dev.conf
+
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower-dev
+    restart: on-failure:5
+    networks:
+      - proxy-watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    env_file: ./env.d/env-watchtower
+    command: itbkk-frontend-dev itbkk-backend-dev itbkk-database-dev
+
+networks:
+  frontier:
+    driver: bridge
+  backtier:
+    driver: bridge
+  proxy-watchtower:
+    driver: bridge
+
+configs:
+  proxy_dev_config:
+    file: ./proxy-conf/dev.conf
