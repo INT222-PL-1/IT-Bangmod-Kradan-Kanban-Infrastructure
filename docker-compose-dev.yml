@@ -40,7 +40,7 @@ services:
     volumes:
       - ./mockup:/docker-entrypoint-initdb.d
       - ./auth-datalib:/var/lib/mysql
-      - ./itbkk_shared_backup.csv:/data.csv
+      - ./itbkk_shared_backup.csv:/var/lib/mysql-files/data.csv
     expose:
       - "3306"
     ports:
