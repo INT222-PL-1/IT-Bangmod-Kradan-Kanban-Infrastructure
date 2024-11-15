@@ -16,5 +16,6 @@ CREATE TABLE `users` (
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE USER authuser IDENTIFIED WITH mysql_native_password BY '1111';
+GRANT SELECT ON `itbkk_shared`.`users` TO authuser;
 
 commit;
