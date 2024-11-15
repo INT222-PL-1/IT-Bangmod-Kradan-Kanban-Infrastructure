@@ -24,9 +24,25 @@ services:
     ports:
       - 13306:3306
 
+  auth_database:
+    image: mysql/mysql-server:latest
+    container_name: itbkk-shared-database-dev
+    restart: on-failure:5
+    healthcheck:
+      test: ["CMD", "/healthcheck.sh"]
+      interval: 2s
+      timeout: 2s
+      retries: 20
+    networks:
+      - backtier
+    volumes:
+      - ./auth-datalib:/var/lib/mysql
+
   backend:
     depends_on:
       database:
+        condition: service_healthy
+      auth_database: 
         condition: service_healthy
     image: wanassanan/itb-kk-backend:development
     container_name: itbkk-backend-dev
