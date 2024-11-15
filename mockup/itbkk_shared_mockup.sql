@@ -14,7 +14,7 @@ CREATE TABLE `users` (
     UNIQUE KEY (username, email)
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-LOAD DATA INFILE 'data.csv'
+LOAD DATA INFILE '/var/lib/mysql-files/data.csv'
 INTO TABLE users 
 FIELDS TERMINATED BY ',' 
 ENCLOSED BY '"'
