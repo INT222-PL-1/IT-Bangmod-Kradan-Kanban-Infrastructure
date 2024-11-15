@@ -40,6 +40,8 @@ services:
     volumes:
       - ./auth-datalib:/var/lib/mysql
       - ./mockup:/docker-entrypoint-initdb.d
+    expose:
+      - "3306"
 
   backend:
     depends_on:
