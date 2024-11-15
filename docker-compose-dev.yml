@@ -37,6 +37,7 @@ services:
       - backtier
     volumes:
       - ./auth-datalib:/var/lib/mysql
+      - ./mockup:/docker-entrypoint-initdb.d
 
   backend:
     depends_on:
