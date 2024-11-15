@@ -35,6 +35,8 @@ services:
       retries: 20
     networks:
       - backtier
+    environment:
+      MYSQL_ROOT_PASSWORD: "itbkk"
     volumes:
       - ./auth-datalib:/var/lib/mysql
       - ./mockup:/docker-entrypoint-initdb.d
