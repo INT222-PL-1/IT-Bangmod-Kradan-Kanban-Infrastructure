@@ -10,6 +10,7 @@ CREATE TABLE `users` (
     name VARCHAR(100) NOT NULL,
     email VARCHAR(50) NOT NULL,
     role ENUM('LECTURER', 'STAFF', 'STUDENT') NOT NULL,
+    created_on DATETIME NOT NULL,
     PRIMARY KEY (oid),
     UNIQUE KEY (username, email)
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
