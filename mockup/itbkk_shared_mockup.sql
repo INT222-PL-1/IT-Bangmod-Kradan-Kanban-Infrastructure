@@ -14,6 +14,13 @@ CREATE TABLE `users` (
     UNIQUE KEY (username, email)
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+LOAD DATA INFILE 'data.csv'
+INTO TABLE users 
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+
 DROP USER IF EXISTS authuser;
 CREATE USER 'authuser'@'%' identified WITH mysql_native_password BY '1111';
 GRANT SELECT ON `itbkk_shared`.`users` TO authuser;
