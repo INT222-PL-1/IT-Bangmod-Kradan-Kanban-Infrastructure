@@ -38,10 +38,12 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: "itbkk"
     volumes:
-      - ./auth-datalib:/var/lib/mysql
       - ./mockup:/docker-entrypoint-initdb.d
+      - ./auth-datalib:/var/lib/mysql
     expose:
       - "3306"
+    ports:
+      - 23306:3306
 
   backend:
     depends_on:
