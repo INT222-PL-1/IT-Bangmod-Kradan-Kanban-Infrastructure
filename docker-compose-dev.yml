@@ -76,6 +76,11 @@ services:
       - proxy-watchtower
     ports:
       - 80:80
+      - 443:443
+    volumes:
+      - ./ssl/nginx.key:/ssl/nginx.key
+      - ./ssl/nginx.crt:/ssl/nginx.crt
+      - ./ssl/dhparam.pem:/ssl/dhparam.pem
     configs:
       - source: proxy_dev_config
         target: /etc/nginx/conf.d/dev.conf
